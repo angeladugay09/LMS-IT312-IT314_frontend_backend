@@ -1,14 +1,26 @@
+import { useState } from "react"; // store data and store function, di pwedeng paltan ng data type
 import HeaderContainer from "../components/HeaderContainer";
 import FormContainer from "../components/FormContainer";
 import ListContainer from "../components/ListContainer";
 
-const StudentPage = () => {
-    const students = [
-        { id: 1, name: "Wilmarc Delos Reyes", srcode: "24-13462", program: "BSIT" },
-        { id: 2, name: "Arabella Salazar", srcode: "24-14264", program: "BSIT" },
-        { id: 3, name: "Sophia Garcia", srcode: "24-12634", program: "BSIT" },
-    ];
-    
+const StudentPage = () =>{
+    const [students, setStudents] = useState([]); 
+
+    const getData = async() => { // async function - non-blocking code
+        const response = await fetch('http://127.0.0.1:3000/student');
+        if(!response.ok) {
+            throw new Error('Unable to fetch data');
+        }
+
+        const data = await response.json();
+        return data;
+    }
+    getData().then((result) =>{
+        setStudents(result);
+    }).catch((e) =>{
+        console.log(e.message);
+    })
+
     return(
         <>
             <HeaderContainer />
